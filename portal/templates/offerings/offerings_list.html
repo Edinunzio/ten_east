@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Available Offerings</h2>
+  <ul>
+    {% for offering in offerings %}
+      <li>
+        <a href="{% url 'offering_detail' offering.id %}">{{ offering.title }}</a>
+        <p>Start Date: {{ offering.start_date }} | End Date: {{ offering.end_date }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{ offering.title }}</h2>
+  <p><strong>Start Date:</strong> {{ offering.start_date }}</p>
+  <p><strong>End Date:</strong> {{ offering.end_date }}</p>
+  <p><strong>IRR:</strong> {{ offering.irr }}</p>
+  <p><strong>MOIC:</strong> {{ offering.moic }}</p>
+  <p><strong>Terms:</strong> {{ offering.terms }}</p>
+  <p><strong>Minimum Investment:</strong> {{ offering.minimum }}</p>
+  <p><strong>Tags:</strong> {{ offering.tags.all|join:", " }}</p>
+  <p><a href="{{ offering.media_url }}">View Media</a></p>
+{% endblock %}
