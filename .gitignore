@@ -1,0 +1,71 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+
+# Django
+*.log
+*.pot
+*.pyc
+*~
+db.sqlite3
+.DS_Store
+/staticfiles
+/media
+
+# If you have a secrets.json file
+secrets.json
+
+# Migrations
+**/migrations/**/000*.py
+**/migrations/**/__pycache__
+
+# Docker
+docker-compose.override.yml
+.env
+.vscode/
+.dockerignore
+
+
+# Local environment files
+.env
+.local.env
+.venv/
+.envrc
+*.envrc
+
+# macOS
+.DS_Store
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+*.iml
+
+# System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# PyCharm specific
+*.idea/
+*.iml
+*.ipr
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
