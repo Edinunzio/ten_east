@@ -19,7 +19,7 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 def landing(request):
-    return render(request, 'home.html')
+    return render(request, 'landing.html')
 
 @login_required
 def home(request):
