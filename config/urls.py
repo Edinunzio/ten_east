@@ -28,4 +28,5 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('home/', views.home, name='home'),
     path('offerings/', views.offerings_list, name='offerings_list'),
+    path('offerings/<slug:slug>/', views.offerings_detail, name='offerings_detail'),
 ]

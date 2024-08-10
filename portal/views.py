@@ -23,14 +23,28 @@ def landing(request):
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    user = request.user
+    phone_number = user.phone_number
+    country_of_residence = user.country_of_residence
+    user_investor_types = request.user.investor_types.all()
+    offerings = Offering.objects.filter(
+        is_active=True,
+        investor_types__in=user_investor_types
+    ).distinct().order_by('-start_date')
+    return render(request, 'home.html', {
+        'offerings': offerings,
+        'username': (user.first_name + ' ' + user.last_name),
+        'phone_number': phone_number,
+        'country_of_residence': country_of_residence,
+        'investor_types': user_investor_types
+    })
 
 @login_required
 def offerings_list(request):
     user_investor_types = request.user.investor_types.all()
     offerings = Offering.objects.filter(
         is_active=True,
-        investor_types__in=user_investors_types
+        investor_types__in=user_investor_types
     ).distinct().order_by('-start_date')
 
     return render(request, 'offerings/offerings_list.html', {
@@ -38,12 +52,13 @@ def offerings_list(request):
     })
 
 @login_required
-def offering_detail(request, offering_id):
-    offering = get_object_or_404(Offering, id=offering_id, is_active=True)
+def offerings_detail(request, slug):
+    offering = get_object_or_404(Offering, slug=slug, is_active=True)
     
     if not offering.investor_types.filter(id__in=request.user.investor_types.all()).exists():
         return redirect('offerings_list')
     
-    return render(request, 'offerings/offering_detail.html', {
+    return render(request, 'offerings/offerings_detail.html', {
         'offering': offering
     })
+

@@ -25,6 +25,7 @@ secrets.json
 # Migrations
 **/migrations/**/000*.py
 **/migrations/**/__pycache__
+backup.sql
 
 # Docker
 docker-compose.override.yml

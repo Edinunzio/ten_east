@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
@@ -10,8 +11,9 @@ class User(AbstractUser):
 
 class Offering(models.Model):
     title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(blank=True, null=True)
     media_url = models.URLField(max_length=500, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     irr = models.FloatField()
@@ -19,11 +21,17 @@ class Offering(models.Model):
     terms = models.TextField()
     minimum = models.IntegerField()
     tags = models.ManyToManyField('OfferingTag', related_name='offerings')
+    investor_types = models.ManyToManyField('InvestorType', related_name='offerings')
     is_ai = models.BooleanField(default=False)
     is_qc = models.BooleanField(default=False)
     is_qp = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Offering, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
