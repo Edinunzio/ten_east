@@ -2,11 +2,11 @@ import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CustomUserCreationForm
-from .models import RequestAllocation, Offering, User
+from .models import RequestAllocation, Offering, User, Referral
 
 class SignupView(View):
     template_name = 'signup.html'
@@ -32,6 +32,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
+        context['user_id'] = user.id
         context['username'] = f"{user.first_name} {user.last_name}"
         context['phone_number'] = user.phone_number
         context['country_of_residence'] = user.country_of_residence
@@ -95,4 +96,25 @@ class CreateRequestAllocationView(View):
             return JsonResponse({'status': 'success', 'data': {'id': request_allocation.id}})
         
         except (User.DoesNotExist, Offering.DoesNotExist, ValueError) as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+
+class CreateReferralView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        user_id = data.get('user')
+        print(data)
+        invite_name = data.get('invite_name')
+        invite_email = data.get('invite_email')
+
+        try:
+            user = User.objects.get(pk=user_id)
+            referral = Referral.objects.create(
+                user=user,
+                invite_name=invite_name,
+                invite_email=invite_email
+            )
+
+            return JsonResponse({'status': 'success', 'data': {'id': referral.id}})
+        
+        except (User.DoesNotExist, ValueError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})

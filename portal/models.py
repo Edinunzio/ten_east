@@ -58,3 +58,12 @@ class RequestAllocation(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.offering.title} - ${self.amount} - {self.request_date}"
+
+
+class Referral(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='referral')
+    invite_name = models.CharField(max_length=100, unique=True)
+    invite_email = models.EmailField(max_length=254, unique=True, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.invite_name} - {self.invite_email}"

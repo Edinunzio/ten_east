@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Offering, OfferingTag, InvestorType, RequestAllocation
+from .models import User, Offering, OfferingTag, InvestorType, RequestAllocation, Referral
 
 class OfferingAdmin(admin.ModelAdmin):
     list_display = (
@@ -18,3 +18,4 @@ admin.site.register(Offering, OfferingAdmin)
 admin.site.register(OfferingTag)
 admin.site.register(InvestorType)
 admin.site.register(RequestAllocation)
+admin.site.register(Referral)

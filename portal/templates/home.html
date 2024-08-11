@@ -9,6 +9,8 @@
     {% include 'offerings/items.html' %}
 {% endfor %}
 <section><a href="{% url 'offerings_list' %}">See all available offerings</a></section>
+<hr>
+{% include 'referral.html' %}
 {% if req_allocations %}
 <h2>Request Allocations</h2>
     <table>
