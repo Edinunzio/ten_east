@@ -1,0 +1,18 @@
+{
+  "name": "ten_east",
+  "version": "1.0.0",
+  "description": "App demo using: - docker - poetry - django - postgres - typescript - pico css",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

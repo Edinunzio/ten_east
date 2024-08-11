@@ -6,8 +6,10 @@
   <p><strong>End Date:</strong> {{ offering.end_date }}</p>
   <p><strong>IRR:</strong> {{ offering.irr }}</p>
   <p><strong>MOIC:</strong> {{ offering.moic }}</p>
-  <p><strong>Terms:</strong> {{ offering.terms }}</p>
+  <p><strong>Terms:</strong> {{ offering.summary }}</p>
   <p><strong>Minimum Investment:</strong> {{ offering.minimum }}</p>
   <p><strong>Tags:</strong> {{ offering.tags.all|join:", " }}</p>
   <p><a href="{{ offering.media_url }}">View Media</a></p>
+
+  {% include 'allocations.html' %}
 {% endblock %}

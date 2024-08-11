@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",                        // Target ECMAScript version
+    "module": "commonjs",                    // Module system
+    "strict": true,                          // Enable strict type-checking options
+    "esModuleInterop": true,                 // Import non-ES modules (like CommonJS modules)
+    "forceConsistentCasingInFileNames": true,// Ensure consistent casing in file names
+    "outDir": "portal/static/dist",                      // Output directory for compiled files
+    "rootDir": "./portal/static/src",        // Root directory for source files
+    "sourceMap": true                        // Generate corresponding .map files
+  },
+  "include": ["portal/static/src/**/*"],                   // Include all .ts files in the src directory
+  "exclude": ["node_modules"]                // Exclude node_modules from the compilation
+}

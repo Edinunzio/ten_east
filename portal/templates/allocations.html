@@ -1,0 +1,37 @@
+<div id="form-container">
+    <div class="card" id="card-1">
+      <p>Step 1 of 3</p>
+      <h3>How much would you like to invest in {{offering.title}}</h3>
+      <p>Please enter in amounts of 10,000</p>
+      <input type="hidden" name="user" value="{{user.id}}">
+      <input type="hidden" name="offering" value="{{offering.id}}">
+      <label><input type="text" name="amount">Amount</label>
+      <small>100k Minimum investment</small>
+      <button class="next-button">Next</button>
+    </div>
+  
+    <div class="card" id="card-2" style="display: none;">
+      <p>Step 2 of 3</p>
+      <h3>Acknowledgments</h3>
+      <p>Please acknowledge and agree to the following statementts to continue.</p>
+      <label> Terms of Service Rules you need to agree to before going forward 1<input type="checkbox" name="card2-option1"></label>
+      <label> Terms of Service Rules you need to agree to before going forward 2<input type="checkbox" name="card2-option2"></label>
+      <label> Terms of Service Rules you need to agree to before going forward 3<input type="checkbox" name="card2-option3"></label>
+      <button  class="previous-button">Back</button>
+      <button class="next-button">Next</button>
+    </div>
+  
+    <div class="card" id="card-3" style="display: none;">
+      <p>Step 3 of 3</p>
+      <h3>Allocation Request Summary</h3>
+      <label>Selected Investment Profile:</label>
+      <p>{{user.first_name}} {{user.last_name}}</p>
+      <label>Selected Offering:</label>
+      <p>{{offering.title}}</p>
+      <label>Amount Requested</label>
+      <p><span id="display-amount"></span></p>
+      <button class="previous-button">Back</button>
+      <button class="submit-button">Submit</button>
+    </div>
+  </div>
+  

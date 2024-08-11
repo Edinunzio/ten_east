@@ -1,13 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Available Offerings</h2>
-  <ul>
-    {% for offering in offerings %}
-      <li>
-        <a href="{% url 'offerings_detail' slug=offering.slug %}">{{ offering.title }}</a>
-        <p>Start Date: {{ offering.start_date }} | End Date: {{ offering.end_date }}</p>
-      </li>
-    {% endfor %}
-  </ul>
+<h2>Available Offerings</h2>  
+{% include 'offerings/card.html' %}
 {% endblock %}

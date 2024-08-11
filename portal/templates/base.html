@@ -5,28 +5,35 @@
     <title>Demo App</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/pico.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pico.colors.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body>
-    <main class="container">
-    <nav>
-        <ul>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'offerings_list' %}">Offerings</a></li>
-                <li><form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form></li>
-            {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'signup' %}">Sign Up</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    {% block content %}
-    {% endblock %}
-</main>
+<body class="container">
+    <header>
+        <nav>
+            <ul>
+                <li><strong><a href="{% url 'landing' %}"><img src="{% static 'img/logo.png' %}" /></a></strong></li>
+            </ul>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'offerings_list' %}">Offerings</a></li>
+                    <li><form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <hr>
+    <main>
+        {% block content %}
+        {% endblock %}
+        <script src="{% static 'dist/app.js' %}"></script>
+    </main>
 </body>
 </html>

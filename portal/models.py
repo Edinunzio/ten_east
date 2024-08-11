@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
@@ -18,7 +19,7 @@ class Offering(models.Model):
     is_active = models.BooleanField(default=True)
     irr = models.FloatField()
     moic = models.FloatField()
-    terms = models.TextField()
+    summary = models.TextField()
     minimum = models.IntegerField()
     tags = models.ManyToManyField('OfferingTag', related_name='offerings')
     investor_types = models.ManyToManyField('InvestorType', related_name='offerings')
@@ -49,3 +50,11 @@ class InvestorType(models.Model):
     def __str__(self):
         return self.name
 
+class RequestAllocation(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='request_allocations')
+    offering = models.ForeignKey('Offering', on_delete=models.CASCADE, related_name='request_allocations')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    request_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.offering.title} - ${self.amount}"
