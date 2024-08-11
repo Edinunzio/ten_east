@@ -26,6 +26,9 @@ class TestViews:
         assert 'form' in response.context
 
     def test_signup_post_valid(self, mocker):
+        """
+        Tests that valid signups redirects to home page. A 200 status code implies errors in the form.
+        """
         mocker.patch('django.contrib.auth.login')
         form_data = {
             'username': 'newuser',
