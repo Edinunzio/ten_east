@@ -2,7 +2,9 @@
 
 {% block content %}
 <h2>Available Offerings</h2>  
-{% include 'offerings/items.html' %}
+{% for offering in offerings %}
+    {% include 'offerings/items.html' %}
+{% endfor %}
 <hr>
 <h3>Past Offerings</h3>
 {% include 'offerings/past_items.html' %}

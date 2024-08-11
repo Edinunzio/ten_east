@@ -5,8 +5,10 @@
 <p>{{it}}</p>
 {% endfor %}
 <h2>Available Offerings</h2>
-{% include 'offerings/items.html' %}
-
+{% for offering in offerings|slice:3 %}
+    {% include 'offerings/items.html' %}
+{% endfor %}
+<section><a href="{% url 'offerings_list' %}">See all available offerings</a></section>
 {% if req_allocations %}
 <h2>Request Allocations</h2>
     <table>
