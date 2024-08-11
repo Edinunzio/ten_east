@@ -66,15 +66,27 @@ class CardNavigator {
         if (this.currentCard === 1) {
             const amountInput = document.querySelector('#card-1 input[name="amount"]') as HTMLInputElement;
             const displayAmount = document.getElementById('display-amount');
-            if (displayAmount && amountInput) {
+    
+            if (amountInput && displayAmount) {
+                const amountValue = parseFloat(amountInput.value);
+                
+                if (isNaN(amountValue) || amountValue <= 100000) {
+                    // If I have time I'll make some custom ui, for now it's an alert.
+                    alert("The minimum is 100,000.");
+                    return;
+                }
+    
+                // If the amount is valid, display it
                 displayAmount.textContent = amountInput.value;
             }
         }
+    
         if (this.currentCard < this.totalCards) {
             this.currentCard++;
             this.showCard(this.currentCard);
         }
     }
+    
 
     private previousCard(): void {
         if (this.currentCard > 1) {
@@ -108,27 +120,22 @@ class CardNavigator {
         .then(data => {
             if (data.status === 'success') {
                 console.log('Request Allocation created successfully:', data);
-                alert('success!');
                 
-                // Hide the form after successful submission
                 const formElement = document.getElementById('form-container');
                 if (formElement) {
                     formElement.style.display = 'none';
                 }
     
-                // Optionally, show a success message
                 const successMessage = document.getElementById('success-message');
                 if (successMessage) {
                     successMessage.style.display = 'block';
                 }
             } else {
                 console.error('Error:', data.message);
-                // Optionally, display an error message to the user
             }
         })
         .catch((error) => {
             console.error('Error:', error);
-            // Optionally, display a generic error message to the user
         });
     }
     
