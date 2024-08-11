@@ -95,6 +95,7 @@ class CardNavigator {
     private submitForm(): void {
         const data = this.collectFormData();
         console.log(data);
+        
         fetch('/create-request-allocation/', {
             method: 'POST',
             headers: {
@@ -107,15 +108,30 @@ class CardNavigator {
         .then(data => {
             if (data.status === 'success') {
                 console.log('Request Allocation created successfully:', data);
+                alert('success!');
+                
+                // Hide the form after successful submission
+                const formElement = document.getElementById('form-container');
+                if (formElement) {
+                    formElement.style.display = 'none';
+                }
+    
+                // Optionally, show a success message
+                const successMessage = document.getElementById('success-message');
+                if (successMessage) {
+                    successMessage.style.display = 'block';
+                }
             } else {
                 console.error('Error:', data.message);
-                console.log('oops')
+                // Optionally, display an error message to the user
             }
         })
         .catch((error) => {
             console.error('Error:', error);
+            // Optionally, display a generic error message to the user
         });
     }
+    
 
     private getCsrfToken(): string {
         const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]') as HTMLInputElement;

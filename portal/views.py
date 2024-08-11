@@ -1,77 +1,78 @@
 import json
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
 from django.contrib.auth import login
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-
 from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CustomUserCreationForm
 from .models import RequestAllocation, Offering, User
 
-def signup(request):
-    if request.method == 'POST':
+class SignupView(View):
+    template_name = 'signup.html'
+    
+    def get(self, request, *args, **kwargs):
+        form = CustomUserCreationForm()
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request, *args, **kwargs):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('home')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'signup.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
-def landing(request):
-    return render(request, 'landing.html')
+class LandingView(TemplateView):
+    template_name = 'landing.html'
 
-@login_required
-def home(request):
-    user = request.user
-    phone_number = user.phone_number
-    country_of_residence = user.country_of_residence
-    user_investor_types = request.user.investor_types.all()
-    active_offerings = Offering.objects.filter(
-        is_active=True,
-        investor_types__in=user_investor_types
-    ).distinct().order_by('-start_date')
-    req_allocations = RequestAllocation.objects.filter(
-        user=user
-    )
-    return render(request, 'home.html', {
-        'offerings': active_offerings,
-        'req_allocations': req_allocations,
-        'username': (user.first_name + ' ' + user.last_name),
-        'phone_number': phone_number,
-        'country_of_residence': country_of_residence,
-        'investor_types': user_investor_types
-    })
+class HomeView(LoginRequiredMixin, TemplateView):
+    template_name = 'home.html'
 
-@login_required
-def offerings_list(request):
-    user_investor_types = request.user.investor_types.all()
-    offerings = Offering.objects.filter(
-        is_active=True,
-        investor_types__in=user_investor_types
-    ).distinct().order_by('-start_date')
-    past_offerings = Offering.objects.filter(
-        is_active=False,
-        investor_types__in=user_investor_types
-    ).distinct().order_by('-end_date')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['username'] = f"{user.first_name} {user.last_name}"
+        context['phone_number'] = user.phone_number
+        context['country_of_residence'] = user.country_of_residence
+        context['investor_types'] = user.investor_types.all()
+        context['offerings'] = Offering.objects.filter(
+            is_active=True,
+            investor_types__in=context['investor_types']
+        ).distinct().order_by('-start_date')
+        context['req_allocations'] = RequestAllocation.objects.filter(user=user)
+        return context
 
-    return render(request, 'offerings/offerings_list.html', {
-        'offerings': offerings,
-        'past_offerings': past_offerings
-    })
+class OfferingsListView(LoginRequiredMixin, ListView):
+    template_name = 'offerings/offerings_list.html'
+    context_object_name = 'offerings'
 
-@login_required
-def offerings_detail(request, slug):
-    offering = get_object_or_404(Offering, slug=slug, is_active=True)
+    def get_queryset(self):
+        user_investor_types = self.request.user.investor_types.all()
+        return Offering.objects.filter(
+            is_active=True,
+            investor_types__in=user_investor_types
+        ).distinct().order_by('-start_date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_investor_types = self.request.user.investor_types.all()
+        context['past_offerings'] = Offering.objects.filter(
+            is_active=False,
+            investor_types__in=user_investor_types
+        ).distinct().order_by('-end_date')
+        return context
+
+class OfferingDetailView(LoginRequiredMixin, DetailView):
+    model = Offering
+    template_name = 'offerings/offerings_detail.html'
+    context_object_name = 'offering'
     
-    if not offering.investor_types.filter(id__in=request.user.investor_types.all()).exists():
-        return redirect('offerings_list')
-    
-    return render(request, 'offerings/offerings_detail.html', {
-        'offering': offering
-    })
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        if not obj.investor_types.filter(id__in=self.request.user.investor_types.all()).exists():
+            redirect('offerings_list')
+        return obj
 
 class CreateRequestAllocationView(View):
     def post(self, request):
