@@ -14,6 +14,13 @@ class CardNavigator {
     }
 
     private setupEventListeners(): void {
+        const form = document.getElementById('form-container') as HTMLFormElement;
+
+        if (form) {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+            });
+        }
         const nextButtons = document.querySelectorAll('.next-button');
         document.querySelectorAll('.next-button').forEach(button => {
             button.addEventListener('click', () => this.nextCard());
@@ -88,7 +95,31 @@ class CardNavigator {
     private submitForm(): void {
         const data = this.collectFormData();
         console.log(data);
-        // Handle the data submission here
+        fetch('/create-request-allocation/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': this.getCsrfToken(),
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Request Allocation created successfully:', data);
+            } else {
+                console.error('Error:', data.message);
+                console.log('oops')
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    private getCsrfToken(): string {
+        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]') as HTMLInputElement;
+        return csrfToken ? csrfToken.value : '';
     }
 }
 

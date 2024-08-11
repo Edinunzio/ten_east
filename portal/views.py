@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
@@ -5,7 +6,9 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .models import Offering
+from django.views import View
+from django.http import JsonResponse
+from .models import RequestAllocation, Offering, User
 
 def signup(request):
     if request.method == 'POST':
@@ -13,7 +16,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')  # Adjust to your desired redirect after signup
+            return redirect('home')
     else:
         form = CustomUserCreationForm()
     return render(request, 'signup.html', {'form': form})
@@ -62,3 +65,25 @@ def offerings_detail(request, slug):
         'offering': offering
     })
 
+class CreateRequestAllocationView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        user_id = data.get('user')
+        offering_id = data.get('offering')
+        amount = data.get('amount')
+
+        try:
+            user = User.objects.get(pk=user_id)
+            offering = Offering.objects.get(pk=offering_id)
+            amount = float(amount)
+
+            request_allocation = RequestAllocation.objects.create(
+                user=user,
+                offering=offering,
+                amount=amount
+            )
+
+            return JsonResponse({'status': 'success', 'data': {'id': request_allocation.id}})
+        
+        except (User.DoesNotExist, Offering.DoesNotExist, ValueError) as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})

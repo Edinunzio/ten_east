@@ -29,4 +29,5 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('offerings/', views.offerings_list, name='offerings_list'),
     path('offerings/<slug:slug>/', views.offerings_detail, name='offerings_detail'),
+    path('create-request-allocation/', views.CreateRequestAllocationView.as_view(), name='create_request_allocation'),
 ]
