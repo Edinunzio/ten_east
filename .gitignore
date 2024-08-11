@@ -70,3 +70,6 @@ $RECYCLE.BIN/
 htmlcov/
 .coverage
 .tox/
+
+# node
+node_modules
