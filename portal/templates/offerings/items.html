@@ -1,0 +1,8 @@
+{% for offering in offerings|slice:3 %}
+<section>
+    <a href="{% url 'offerings_detail' slug=offering.slug %}">{{ offering.title }}</a>
+    <p>{{ offering.summary |truncatewords:40 }}</p>
+    <p>Start Date: {{ offering.start_date }} | End Date: {{ offering.end_date }}</p>
+</section>
+{% endfor %}
+<section><a href="{% url 'offerings_list' %}">See all available offerings</a></section>

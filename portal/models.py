@@ -57,4 +57,4 @@ class RequestAllocation(models.Model):
     request_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.offering.title} - ${self.amount}"
+        return f"{self.user.username} - {self.offering.title} - ${self.amount} - {self.request_date}"

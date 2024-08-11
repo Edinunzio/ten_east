@@ -1,8 +1,7 @@
 import json
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
@@ -30,12 +29,16 @@ def home(request):
     phone_number = user.phone_number
     country_of_residence = user.country_of_residence
     user_investor_types = request.user.investor_types.all()
-    offerings = Offering.objects.filter(
+    active_offerings = Offering.objects.filter(
         is_active=True,
         investor_types__in=user_investor_types
     ).distinct().order_by('-start_date')
+    req_allocations = RequestAllocation.objects.filter(
+        user=user
+    )
     return render(request, 'home.html', {
-        'offerings': offerings,
+        'offerings': active_offerings,
+        'req_allocations': req_allocations,
         'username': (user.first_name + ' ' + user.last_name),
         'phone_number': phone_number,
         'country_of_residence': country_of_residence,
@@ -49,9 +52,14 @@ def offerings_list(request):
         is_active=True,
         investor_types__in=user_investor_types
     ).distinct().order_by('-start_date')
+    past_offerings = Offering.objects.filter(
+        is_active=False,
+        investor_types__in=user_investor_types
+    ).distinct().order_by('-end_date')
 
     return render(request, 'offerings/offerings_list.html', {
-        'offerings': offerings
+        'offerings': offerings,
+        'past_offerings': past_offerings
     })
 
 @login_required
