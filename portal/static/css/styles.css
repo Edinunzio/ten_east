@@ -1,7 +1,6 @@
 .card {
     border: 1px solid #ccc;
     padding: 20px;
-    margin: 20px;
     border-radius: 5px;
     background-color: #f9f9f9;
   }
@@ -17,7 +16,6 @@
   }
 
   .tag{
-
     border: 2px solid #0F2D70;
     border-radius: 5px;
     padding: 10px

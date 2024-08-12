@@ -1,11 +1,11 @@
 # Ten East
 App demo using:
-- [docker](https://www.docker.com/)
-- [poetry](https://python-poetry.org/)
-- [django](https://www.djangoproject.com/)
-- [postgres](https://www.postgresql.org/)
-- [typescript](https://www.typescriptlang.org/)
-- [pico css](https://github.com/picocss/pico)
+- [Docker](https://www.docker.com/)
+- [Poetry](https://python-poetry.org/)
+- [Django](https://www.djangoproject.com/)
+- [Postgres](https://www.postgresql.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Pico css](https://github.com/picocss/pico)
 
 ## Requirements
  - Docker
@@ -22,7 +22,6 @@ App should be available at `localhost:8000`
 ## Running Tests
 Once a container has been built and is up, run the following:
 ```docker compose exec web pytest```
-
 
 ## Features
 **Signup, Login, Logout**
@@ -50,3 +49,6 @@ Once a container has been built and is up, run the following:
  - Users are required to submit a minimum of 100K
  - Users can not submit until they have agreed to all the ToS
  - Successful Request Allocations populate a table on the user's home page.
+
+### Misc
+ - [More info](https://github.com/Edinunzio/ten_east/wiki)

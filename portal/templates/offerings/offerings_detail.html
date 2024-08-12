@@ -2,14 +2,42 @@
 
 {% block content %}
   <h2>{{ offering.title }}</h2>
-  <p><strong>Start Date:</strong> {{ offering.start_date }}</p>
-  <p><strong>End Date:</strong> {{ offering.end_date }}</p>
-  <p><strong>IRR:</strong> {{ offering.irr }}</p>
-  <p><strong>MOIC:</strong> {{ offering.moic }}</p>
-  <p><strong>Terms:</strong> {{ offering.summary }}</p>
-  <p><strong>Minimum Investment:</strong> {{ offering.minimum }}</p>
-  <p><strong>Tags:</strong> {{ offering.tags.all|join:", " }}</p>
-  <p><a href="{{ offering.media_url }}">View Media</a></p>
+  <section>
+    <p>Start Date: {{ offering.start_date }} | End Date: {{ offering.end_date }}</p>
+  </section>
+  <section>
+    <p><strong>Tags:</strong> {{ offering.tags.all|join:", " }}</p>
+    <p><a href="{{ offering.media_url }}">View Media</a></p>
+  </section>
+  <hr>
+  <section>
+    <table>
+        <tbody>
+          <tr>
+              <td><strong>Target Net IRR</strong></td>
+              <td>{{ offering.irr }}%</td>
+          </tr>
+          <tr>
+              <td><strong>Target Net MOIC</strong></td>
+              <td>{{ offering.moic }}x</td>
+          </tr>
+          <tr>
+              <td><strong>Estimated Term</strong></td>
+              <td>3 - 5 years</td>
+          </tr>
+          <tr>
+              <td><strong>Minimum Investment</strong></td>
+              <td>${{ offering.minimum }}</td>
+          </tr>
+        </tbody>
+    </table>
+  </section>
+  <section>
+    <p>{{ offering.summary }}</p>
+  </section>
+  
+  
+  
 
   {% include 'allocations.html' %}
 {% endblock %}
