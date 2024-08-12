@@ -1,0 +1,1 @@
+[{"model": "portal.offeringtag", "pk": 1, "fields": {"name": "Private Credit"}}, {"model": "portal.offeringtag", "pk": 2, "fields": {"name": "Current Income"}}, {"model": "portal.offeringtag", "pk": 3, "fields": {"name": "Real Estate"}}, {"model": "portal.offeringtag", "pk": 4, "fields": {"name": "Private Equity"}}]

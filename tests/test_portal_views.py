@@ -1,7 +1,7 @@
 import pytest, json
 from django.urls import reverse
 from django.test import Client
-from portal.models import Offering, RequestAllocation, InvestorType, OfferingTag, User
+from portal.models import Offering, RequestAllocation, InvestorType, OfferingTag, User, Referral
 
 
 @pytest.mark.django_db
@@ -181,3 +181,48 @@ class TestViews:
         response = self.client.post(reverse('create_request_allocation'), data=json.dumps(payload), content_type='application/json')
         assert response.status_code == 200
         assert response.json()['status'] == 'error'
+
+@pytest.mark.django_db
+class TestCreateReferralView:
+
+    def setup_method(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpassword',
+            email='testuser@example.com',
+        )
+
+    def test_create_referral_success(self):
+        # Test the successful creation of a referral
+        payload = {
+            'user': self.user.id,
+            'invite_name': 'John Doe',
+            'invite_email': 'johndoe@example.com',
+        }
+        response = self.client.post(reverse('create_referral'), data=json.dumps(payload), content_type='application/json')
+        
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data['status'] == 'success'
+        assert 'id' in response_data['data']
+        
+        # Verify that the referral was actually created in the database
+        referral = Referral.objects.get(id=response_data['data']['id'])
+        assert referral.user == self.user
+        assert referral.invite_name == 'John Doe'
+        assert referral.invite_email == 'johndoe@example.com'
+
+    def test_create_referral_user_does_not_exist(self):
+        # Test creating a referral with a non-existent user
+        payload = {
+            'user': 999,  # Non-existent user ID
+            'invite_name': 'Jane Doe',
+            'invite_email': 'janedoe@example.com',
+        }
+        response = self.client.post(reverse('create_referral'), data=json.dumps(payload), content_type='application/json')
+        
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data['status'] == 'error'
+        assert 'message' in response_data

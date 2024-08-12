@@ -12,10 +12,12 @@ App demo using:
  - Docker Compose
 
 ## Installation
-```
-docker compose up --build
-```
+```docker compose up --build```
+
 App should be available at `localhost:8000`
+
+### Creating superuser
+```docker compose exec web python manage.py createsuperuser```
 
 ## Running Tests
 Once a container has been built and is up, run the following:
@@ -23,14 +25,14 @@ Once a container has been built and is up, run the following:
 
 
 ## Features
+**Signup, Login, Logout**
+
+**Invite a Member**
+
+**Request Allocation**
 
 
-```
-docker compose exec db pg_dump -U myuser -d mydatabase > backup.sql
 
-cat backup.sql | docker compose exec -T db psql -U myuser -d mydatabase
-
-```
 
 ### Special Notes
 There have been decisions made considering the scope and goal of the project that I would normally handle differently in a production setting. The overall goal is for an easy to use demo of a web application that demonstrates my skills with regards to full stack web development, software design, and overall adherence to best practices in software engineering.

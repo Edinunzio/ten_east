@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<p>Hello, {{username}}! You've reached the home page!</p>
+<p>Hello, {{username}}!</p>
 {% for it in investor_types %}
-<p>{{it}}</p>
+<p><strong>Investor Type: </strong>{{it}}</p>
 {% endfor %}
 <h2>Available Offerings</h2>
 {% for offering in offerings|slice:3 %}
@@ -13,7 +13,7 @@
 {% include 'referral.html' %}
 {% if req_allocations %}
 <h2>Request Allocations</h2>
-    <table>
+    <table class="striped">
         <thead>
             <tr>
                 <th>Date</th>

@@ -14,26 +14,33 @@
             <ul>
                 <li><strong><a href="{% url 'landing' %}"><img src="{% static 'img/logo.png' %}" /></a></strong></li>
             </ul>
-            <ul>
+            
                 {% if user.is_authenticated %}
+                <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'offerings_list' %}">Offerings</a></li>
                     <li><form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
                         <button type="submit">Logout</button>
                     </form></li>
+                </ul>
                 {% else %}
+                <ul>
                     <li><a href="{% url 'login' %}">Login</a></li>
                     <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                </ul>
                 {% endif %}
-            </ul>
+            
         </nav>
     </header>
     <hr>
     <main>
         {% block content %}
-        {% endblock %}
-        <script src="{% static 'dist/app.js' %}"></script>
+        {% endblock %}   
     </main>
+    <footer>
+        <small>Copyright 2024</small>
+    </footer>
+    <script src="{% static 'dist/app.js' %}"></script>
 </body>
 </html>

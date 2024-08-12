@@ -1,5 +1,43 @@
-<section>
-    <a href="{% url 'offerings_detail' slug=offering.slug %}">{{ offering.title }}</a>
-    <p>{{ offering.summary |truncatewords:40 }}</p>
-    <p>Start Date: {{ offering.start_date }} | End Date: {{ offering.end_date }}</p>
+<section class="offering-item">
+    <div class="grid">
+        <div>
+            <h4><a href="{% url 'offerings_detail' slug=offering.slug %}">{{ offering.title }}</a></h4>
+            {% for tag in offering.tags.all %}
+                <span class="tag">{{tag}}</span>
+            {% endfor %}
+            <hr>
+            <section>
+                <p>Start Date: {{ offering.start_date }} | End Date: {{ offering.end_date }}</p>
+            </section>
+        </div>
+        <div>
+            <p>{{ offering.summary |truncatewords:30 }}</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><strong>Target Net IRR</strong></td>
+                        <td>{{ offering.irr }}%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Target Net MOIC</strong></td>
+                        <td>{{ offering.moic }}x</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Estimated Term</strong></td>
+                        <td>3 - 5 years</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Minimum Investment</strong></td>
+                        <td>${{ offering.minimum }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><a href="{% url 'offerings_detail' slug=offering.slug %}"><button class="contrast">VIEW DETAILS</button></a></td>
+                        <td><a href="{% url 'offerings_detail' slug=offering.slug %}#form-allocations"><button class="contrast">REQUEST ALLOCATION</button></a></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </section>
