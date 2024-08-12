@@ -2,34 +2,29 @@ class CardNavigator {
     private currentCard: number;
     private totalCards: number;
 
-    constructor() {
+    constructor(totalCards: number = 3) {
         this.currentCard = 1;
-        this.totalCards = 3;
-        this.init();
+        this.totalCards = totalCards;
     }
 
-    private init(): void {
+    public init(): void {
+        this.preventFormSubmissionOnEnter();
         this.showCard(this.currentCard);
         this.setupEventListeners();
     }
 
+    private preventFormSubmissionOnEnter(): void {
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                }
+            });
+        });
+    }
+
     private setupEventListeners(): void {
-        const allocationForm = document.getElementById('form-allocations') as HTMLFormElement;
-        const referralForm = document.getElementById('form-referral') as HTMLFormElement;
-
-        if (allocationForm) {
-            allocationForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-            });
-        }
-
-        if (referralForm) {
-            referralForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                this.submitReferralForm();
-            });
-        }
-
         document.querySelectorAll('.next-button').forEach(button => {
             button.addEventListener('click', () => this.nextCard());
         });
@@ -37,11 +32,6 @@ class CardNavigator {
         document.querySelectorAll('.previous-button').forEach(button => {
             button.addEventListener('click', () => this.previousCard());
         });
-
-        const submitButton = document.querySelector('.submit-allocations');
-        if (submitButton) {
-            submitButton.addEventListener('click', () => this.submitForm());
-        }
     }
 
     private showCard(cardNumber: number): void {
@@ -99,9 +89,38 @@ class CardNavigator {
             this.showCard(this.currentCard);
         }
     }
+}
 
-    private collectFormData(): { [key: string]: string } {
-        const inputs = document.querySelectorAll('#form-allocations input:not([type="checkbox"])');
+class FormHandler {
+    constructor() {
+        this.setupEventListeners();
+    }
+
+    private setupEventListeners(): void {
+        const allocationForm = document.getElementById('form-allocations') as HTMLFormElement;
+        const referralForm = document.getElementById('form-referral') as HTMLFormElement;
+
+        if (allocationForm) {
+            allocationForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+            });
+        }
+
+        if (referralForm) {
+            referralForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                this.submitReferralForm();
+            });
+        }
+
+        const submitButton = document.querySelector('.submit-allocations');
+        if (submitButton) {
+            submitButton.addEventListener('click', () => this.submitAllocationForm());
+        }
+    }
+
+    private collectFormData(formId: string): { [key: string]: string } {
+        const inputs = document.querySelectorAll(`#${formId} input:not([type="checkbox"])`);
         return [...inputs].reduce((formData: { [key: string]: string }, input) => {
             const inputElement = input as HTMLInputElement;
             formData[inputElement.name] = inputElement.value;
@@ -109,10 +128,10 @@ class CardNavigator {
         }, {});
     }
 
-    private submitForm(): void {
-        const data = this.collectFormData();
+    private submitAllocationForm(): void {
+        const data = this.collectFormData('form-allocations');
         console.log(data);
-        
+
         fetch('/create-request-allocation/', {
             method: 'POST',
             headers: {
@@ -125,12 +144,12 @@ class CardNavigator {
         .then(data => {
             if (data.status === 'success') {
                 console.log('Request Allocation created successfully:', data);
-                
+
                 const formElement = document.getElementById('form-allocations');
                 if (formElement) {
                     formElement.style.display = 'none';
                 }
-    
+
                 const successMessage = document.getElementById('success-message');
                 if (successMessage) {
                     successMessage.style.display = 'block';
@@ -147,13 +166,13 @@ class CardNavigator {
     private submitReferralForm(): void {
         const referralForm = document.getElementById('form-referral') as HTMLFormElement;
         const formData = new FormData(referralForm);
-        
+
         const data: { [key: string]: any } = {};
         formData.forEach((value, key) => {
             data[key] = value;
         });
         console.log(data);
-    
+
         fetch('/create-referral/', {
             method: 'POST',
             headers: {
@@ -165,6 +184,7 @@ class CardNavigator {
         .then(response => {
             if (response.ok) {
                 alert('Your referral has been submitted');
+                this.resetForm(referralForm);
             } else {
                 console.error('Failed to submit referral form:', response.statusText);
             }
@@ -173,7 +193,10 @@ class CardNavigator {
             console.error('Error submitting referral form:', error);
         });
     }
-    
+
+    private resetForm(form: HTMLFormElement): void {
+        form.reset();
+    }
 
     private getCsrfToken(): string {
         const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]') as HTMLInputElement;
@@ -181,4 +204,9 @@ class CardNavigator {
     }
 }
 
-const cardNavigator = new CardNavigator();
+document.addEventListener('DOMContentLoaded', () => {
+    const cardNavigator = new CardNavigator(3);
+    cardNavigator.init();
+
+    const formHandler = new FormHandler();
+});

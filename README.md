@@ -41,8 +41,9 @@ Once a container has been built and is up, run the following:
  - This does not yet send an email, but it does track the user who sent it, the invitee, their email, and a timestamp.
 
 **View Offerings**
-- There is a list view of Offerings, and a Detail view. Clicking on any Offering title or "view details" button will take you to the detail view
-- Clicking on the "Request Allocation" will take you to the request allocation form for the particular offering you were inspecting.
+ - There is a list view of Offerings, and a Detail view. Clicking on any Offering title or "view details" button will take you to the detail view
+ - Clicking on the "Request Allocation" will take you to the request allocation form for the particular offering you were inspecting.
+ - Each offering references "tags" that are stored in the OfferingTags table. You can see them as outlined "pills" in each offering summary listing. 
 
 **Request Allocation**
  - Allows users to submit a request allocation for the offering they are currently viewing
