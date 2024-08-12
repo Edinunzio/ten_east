@@ -34,6 +34,18 @@ class CardNavigator {
         });
     }
 
+    private allCheckboxesChecked(cardNumber: number): boolean {
+        const checkboxes = document.querySelectorAll(`#card-${cardNumber} input[type="checkbox"]`);
+        return [...checkboxes].every(checkbox => (checkbox as HTMLInputElement).checked);
+    }
+
+    private updateNextButtonState(cardNumber: number): void {
+        const nextButton = document.querySelector(`#card-${cardNumber} .next-button`) as HTMLButtonElement;
+        if (nextButton) {
+            nextButton.disabled = !this.allCheckboxesChecked(cardNumber);
+        }
+    }
+
     private showCard(cardNumber: number): void {
         document.querySelectorAll('.card').forEach(card => (card as HTMLElement).style.display = 'none');
         const currentCardElement = document.getElementById(`card-${cardNumber}`);
@@ -45,18 +57,6 @@ class CardNavigator {
             currentCardElement.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.addEventListener('change', () => this.updateNextButtonState(cardNumber));
             });
-        }
-    }
-
-    private allCheckboxesChecked(cardNumber: number): boolean {
-        const checkboxes = document.querySelectorAll(`#card-${cardNumber} input[type="checkbox"]`);
-        return [...checkboxes].every(checkbox => (checkbox as HTMLInputElement).checked);
-    }
-
-    private updateNextButtonState(cardNumber: number): void {
-        const nextButton = document.querySelector(`#card-${cardNumber} .next-button`) as HTMLButtonElement;
-        if (nextButton) {
-            nextButton.disabled = !this.allCheckboxesChecked(cardNumber);
         }
     }
 
@@ -187,6 +187,8 @@ class FormHandler {
                 this.resetForm(referralForm);
             } else {
                 console.error('Failed to submit referral form:', response.statusText);
+                alert('This referral has already been made.');
+                this.resetForm(referralForm);
             }
         })
         .catch(error => {

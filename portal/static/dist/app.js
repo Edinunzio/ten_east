@@ -27,6 +27,16 @@ class CardNavigator {
             button.addEventListener('click', () => this.previousCard());
         });
     }
+    allCheckboxesChecked(cardNumber) {
+        const checkboxes = document.querySelectorAll(`#card-${cardNumber} input[type="checkbox"]`);
+        return [...checkboxes].every(checkbox => checkbox.checked);
+    }
+    updateNextButtonState(cardNumber) {
+        const nextButton = document.querySelector(`#card-${cardNumber} .next-button`);
+        if (nextButton) {
+            nextButton.disabled = !this.allCheckboxesChecked(cardNumber);
+        }
+    }
     showCard(cardNumber) {
         document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
         const currentCardElement = document.getElementById(`card-${cardNumber}`);
@@ -36,16 +46,6 @@ class CardNavigator {
             currentCardElement.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.addEventListener('change', () => this.updateNextButtonState(cardNumber));
             });
-        }
-    }
-    allCheckboxesChecked(cardNumber) {
-        const checkboxes = document.querySelectorAll(`#card-${cardNumber} input[type="checkbox"]`);
-        return [...checkboxes].every(checkbox => checkbox.checked);
-    }
-    updateNextButtonState(cardNumber) {
-        const nextButton = document.querySelector(`#card-${cardNumber} .next-button`);
-        if (nextButton) {
-            nextButton.disabled = !this.allCheckboxesChecked(cardNumber);
         }
     }
     nextCard() {
@@ -159,6 +159,8 @@ class FormHandler {
             }
             else {
                 console.error('Failed to submit referral form:', response.statusText);
+                alert('This referral has already been made.');
+                this.resetForm(referralForm);
             }
         })
             .catch(error => {
