@@ -29,6 +29,8 @@ Once a container has been built and is up, run the following:
 
 **Invite a Member**
 
+**View Offerings**
+
 **Request Allocation**
 
 
