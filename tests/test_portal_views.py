@@ -183,6 +183,7 @@ class TestViews:
         assert response.status_code == 200
         assert response.json()['status'] == 'error'
 
+
 @pytest.mark.django_db
 class TestCreateReferralView:
 
@@ -201,12 +202,12 @@ class TestCreateReferralView:
             'invite_email': 'johndoe@example.com',
         }
         response = self.client.post(reverse('create_referral'), data=json.dumps(payload), content_type='application/json')
-        
+
         assert response.status_code == 200
         response_data = response.json()
         assert response_data['status'] == 'success'
         assert 'id' in response_data['data']
-        
+
         # Verify that the referral was actually created in the database
         referral = Referral.objects.get(id=response_data['data']['id'])
         assert referral.user == self.user
@@ -221,7 +222,7 @@ class TestCreateReferralView:
             'invite_email': 'janedoe@example.com',
         }
         response = self.client.post(reverse('create_referral'), data=json.dumps(payload), content_type='application/json')
-        
+
         assert response.status_code == 200
         response_data = response.json()
         assert response_data['status'] == 'error'
