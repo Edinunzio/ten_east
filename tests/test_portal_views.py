@@ -27,7 +27,8 @@ class TestViews:
 
     def test_signup_post_valid(self, mocker):
         """
-        Tests that valid signups redirects to home page. A 200 status code implies errors in the form.
+        Tests that valid signups redirects to home page. A 200 status code
+        implies errors in the form.
         """
         mocker.patch('django.contrib.auth.login')
         form_data = {
@@ -194,7 +195,6 @@ class TestCreateReferralView:
         )
 
     def test_create_referral_success(self):
-        # Test the successful creation of a referral
         payload = {
             'user': self.user.id,
             'invite_name': 'John Doe',
@@ -216,7 +216,7 @@ class TestCreateReferralView:
     def test_create_referral_user_does_not_exist(self):
         # Test creating a referral with a non-existent user
         payload = {
-            'user': 999,  # Non-existent user ID
+            'user': 999,
             'invite_name': 'Jane Doe',
             'invite_email': 'janedoe@example.com',
         }

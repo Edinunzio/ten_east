@@ -3,12 +3,15 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
+
 class User(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     country_of_residence = models.CharField(max_length=100)
     investor_types = models.ManyToManyField('InvestorType', related_name='users')
+
     def __str__(self):
         return self.username
+
 
 class Offering(models.Model):
     title = models.CharField(max_length=255)
@@ -37,6 +40,7 @@ class Offering(models.Model):
     def __str__(self):
         return self.title
 
+
 class OfferingTag(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
@@ -49,6 +53,7 @@ class InvestorType(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class RequestAllocation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='request_allocations')

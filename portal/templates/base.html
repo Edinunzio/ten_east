@@ -19,10 +19,7 @@
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'offerings_list' %}">Offerings</a></li>
-                    <li><form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit">Logout</button>
-                    </form></li>
+                    <li><a href="{% url 'logout' %}" id="logout-link">Logout</a></li>
                 </ul>
                 {% else %}
                 <ul>
@@ -42,5 +39,30 @@
         <small>Copyright 2024</small>
     </footer>
     <script src="{% static 'dist/app.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = logoutLink.href;
+    
+                    var csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = 'csrfmiddlewaretoken';
+                    csrfToken.value = '{{ csrf_token }}';
+    
+                    form.appendChild(csrfToken);
+    
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+        });
+    </script>
+    
+        
 </body>
 </html>
